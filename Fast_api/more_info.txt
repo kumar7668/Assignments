@@ -1,0 +1,60 @@
+## Question 1: FastAPI handles asynchronous requests using Python's async and await syntax, allowing you to write asynchronous code that can handle multiple requests concurrently. When a route handler is marked with async def, it can use await to asynchronously wait for other functions to complete, such as database queries or external API calls, without blocking the main thread.
+
+Benefits of using asynchronous code in FastAPI:
+
+Improved performance: Asynchronous code allows FastAPI to handle multiple requests concurrently, making better use of server resources and improving overall performance.
+Scalability: By handling requests asynchronously, FastAPI can handle a larger number of requests without requiring additional server resources.
+Responsiveness: Asynchronous code allows FastAPI to respond to requests quickly, even when performing complex operations, enhancing the user experience.
+
+
+## Question 2: Dependency injection in FastAPI allows you to define dependencies (such as database connections or external services) that can be reused across multiple routes or applications. Dependencies are injected into route handlers automatically by FastAPI, making it easy to manage and share resources.
+
+Example of dependency injection in FastAPI:
+###############################################################
+        from fastapi import Depends, FastAPI
+
+        app = FastAPI()
+
+        # Dependency
+        def get_db():
+            db = DBSession()
+            try:
+                yield db
+            finally:
+                db.close()
+
+        # Route that uses the dependency
+        @app.get("/items/")
+        async def read_items(db: Session = Depends(get_db)):
+            return db.query(Item).all()
+
+In this example, the get_db function is a dependency that provides a database session (DBSession).
+The read_items route uses this dependency by including db: Session = Depends(get_db) in its parameters. FastAPI automatically injects the database session into the route handler when it is called.
+
+
+## Question 3: Code walkthrough
+
+Certainly! Let's walk through the code you provided, which is a FastAPI application with CRUD operations for managing books and their reviews, along with an endpoint for confirming reviews via email.
+
+1. Imports and Setup: The code starts with necessary imports, including FastAPI, SQLAlchemy for database operations, and the send_email function from your mailer.py module.
+
+2.Database Setup: It defines a SQLite database connection using SQLAlchemy and creates a sessionmaker for handling database sessions.
+
+3. Database Models: Two database models are defined using SQLAlchemy: Book and Review. These models represent books and their reviews, with a one-to-many relationship between them.
+
+4. Pydantic Models: Pydantic models are used for data validation and serialization. BookCreate and ReviewCreate models are used for creating new books and reviews, respectively, and BookResponse and ReviewResponse are used for returning book and review data in API responses.
+
+5. CRUD Operations for Books: Functions are defined for creating, reading, updating, and deleting books (create_book, get_book, update_book, delete_book). These functions interact with the database using SQLAlchemy.
+
+6. CRUD Operations for Reviews: Similar CRUD operations are defined for reviews (create_review, get_reviews, update_review, delete_review).
+
+7. API Endpoints: FastAPI endpoints are defined for interacting with the books and reviews data. Endpoints include:
+
+    Creating, reading, updating, and deleting books (add_book, read_book, update_book_details, remove_book)
+    Getting reviews for a specific book (get_book_reviews)
+    Adding, updating, and deleting reviews (add_review, update_review_details, remove_review)
+    Confirming a review and sending an email confirmation (confirm_review)
+
+8. Main Block: The if __name__ == "__main__": block starts the FastAPI application using uvicorn with host and port configurations.
+
+Overall, the code provides a RESTful API for managing books and reviews, demonstrating how to use FastAPI with SQLAlchemy for database operations and Pydantic for data validation and serialization.
