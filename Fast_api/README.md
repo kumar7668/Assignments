@@ -38,7 +38,7 @@ ReviewResponse: Pydantic model for returning review data.
 # Database
 This project uses SQLite as the database. The database file (test.db) will be created in the project directory.
 To run DB file, 
-    python test.py
+    python db_conn.py
 
 
 # Testing
